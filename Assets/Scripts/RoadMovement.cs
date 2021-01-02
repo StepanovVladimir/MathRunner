@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class RoadMovement : MonoBehaviour
 {
-    public GameManager GM;
-
+    GameManager GM;
+    float moveSpeed = 7.5f;
     Vector3 moveVec;
 
     void Start()
@@ -16,9 +16,9 @@ public class RoadMovement : MonoBehaviour
 
     void Update()
     {
-        if (GM.canPlay)
+        if (GM.canPlay && !GM.damage)
         {
-            transform.Translate(moveVec * Time.deltaTime * GM.moveSpeed);
+            transform.Translate(moveVec * Time.deltaTime * moveSpeed);
         }
     }
 }

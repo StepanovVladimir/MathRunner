@@ -1,0 +1,28 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class LevelsManager : MonoBehaviour
+{
+    public Button[] levels;
+
+    void Start()
+    {
+        for (int i = 0; i < PlayerPrefs.GetInt("Levels"); i++)
+        {
+            levels[i].interactable = true;
+        }
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void StartLevel(int number)
+    {
+        SceneManager.LoadScene("Level" + number);
+    }
+}
