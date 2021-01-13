@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     public Text[] answersTexts;
 
     Rigidbody rb;
-    float jumpSpeed = 12;
+    float jumpSpeed = 1.2f;
     bool wannaJump = false;
 
     int indexOfRightAnswer;
@@ -28,13 +28,21 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.AddForce(new Vector3(0, Physics.gravity.y * 3, 0), ForceMode.Acceleration);
+        if (transform.localPosition.y > 0)
+        {
+            rb.AddForce(new Vector3(0, Physics.gravity.y * 0.3f, 0), ForceMode.Acceleration);
+        }
+        else
+        {
+            transform.localPosition = new Vector3(0, 0.01f, 0);
+        }
 
         if (wannaJump && isGrounded())
         {
             animator.SetTrigger("jumping");
             rb.AddForce(new Vector3(0, jumpSpeed, 0), ForceMode.VelocityChange);
             wannaJump = false;
+            AudioManager.instance.PlayJumpEffect();
         }
     }
 
@@ -46,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Destroy(collision.gameObject);
+        AudioManager.instance.PlayCollisionEffect();
         StartCoroutine(Damage());
     }
 
@@ -124,6 +133,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     answers[i].SetActive(false);
                 }
+                AudioManager.instance.PlayWrongEquationEffect();
                 StartCoroutine(Damage());
             }
         }
@@ -175,7 +185,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (index != indexOfRightAnswer)
         {
+            AudioManager.instance.PlayWrongEquationEffect();
             StartCoroutine(Damage());
+        }
+        else
+        {
+            AudioManager.instance.PlayRightEquationEffect();
         }
     }
 
@@ -184,6 +199,7 @@ public class PlayerMovement : MonoBehaviour
         GM.canPlay = false;
         animator.SetTrigger("win");
         jumpButton.SetActive(false);
+        AudioManager.instance.PlayWinEffect();
 
         yield return new WaitForSeconds(1.55f);
 

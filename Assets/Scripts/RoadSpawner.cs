@@ -8,14 +8,18 @@ public class RoadSpawner : MonoBehaviour
     public List<GameObject> blocks;
 
     int blocksCount = 2;
-    float blockLength;
+    float blockLength = 10;
+    bool initialized = false;
 
     List<GameObject> currentBlocks = new List<GameObject>();
 
-    void Start()
+    public void Initialaze()
     {
-        blockLength = startBlock.GetComponent<BoxCollider>().bounds.size.x;
-        StartGame();
+        if (!initialized)
+        {
+            initialized = true;
+            StartGame();
+        }
     }
 
     public void StartGame()
@@ -34,21 +38,23 @@ public class RoadSpawner : MonoBehaviour
 
     void CheckForSpawn()
     {
-        if (blocks.Count > 0 && currentBlocks[0].transform.position.x < -10)
+        if (blocks.Count > 0 && currentBlocks.Count > 0)
         {
-            SpawnBlock();
-            DestroyBlock();
+            if (currentBlocks[0].transform.localPosition.z < -10)
+            {
+                SpawnBlock();
+                DestroyBlock();
+            }
         }
     }
 
     void SpawnBlock()
     {
         GameObject block = Instantiate(blocks[0], transform);
-        Vector3 blockPos;
 
-        blockPos = currentBlocks[currentBlocks.Count - 1].transform.position + new Vector3(blockLength, 0, 0);
+        float ZPos = currentBlocks[currentBlocks.Count - 1].transform.localPosition.z + blockLength;
 
-        block.transform.position = blockPos;
+        block.transform.localPosition = new Vector3(0, 0, ZPos);
         currentBlocks.Add(block);
         blocks.RemoveAt(0);
     }

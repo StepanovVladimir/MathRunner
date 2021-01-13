@@ -5,7 +5,7 @@ using UnityEngine;
 public class RoadMovement : MonoBehaviour
 {
     GameManager GM;
-    float moveSpeed = 7.5f;
+    float moveSpeed = 0.75f;
     Vector3 moveVec;
 
     void Start()

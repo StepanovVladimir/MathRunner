@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public PlayerMovement PM;
     public bool canPlay = false;
     public bool damage = false;
+    public bool isSound;
     public float time;
     public Text timerText;
     public GameObject lose;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     {
         timerText.text = time.ToString("F2");
         ActivateSkin(PlayerPrefs.GetInt("Skin"));
+        isSound = PlayerPrefs.GetInt("Sound") == 0;
     }
 
     void Update()
@@ -90,6 +92,7 @@ public class GameManager : MonoBehaviour
     {
         canPlay = false;
         PM.Lose();
+        AudioManager.instance.PlayLoseEffect();
 
         yield return new WaitForSeconds(2.85f);
 
